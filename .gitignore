@@ -1,0 +1,5 @@
+# JetBrains folder
+.idea
+
+# Node build artifacts
+node_modules

@@ -1,0 +1,22 @@
+{
+  "name": "loopjam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "start npm run watch-backend & start npm run watch-ui",
+    "watch-backend": "tsc -w",
+    "watch-ui": "cd frontend && npm run watch",
+    "build-backend": "tsc",
+    "start": "node --experimental-modules dist/app.js",
+    "heroku-postbuild": "cd frontend && npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+  }
+}
