@@ -95,14 +95,60 @@
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
-exports.Hello = function (props) { return React.createElement("h1", null,
-    "Hello from ",
-    props.compiler,
-    " and ",
-    props.framework,
-    "!"); };
+var utils_1 = __webpack_require__(/*! ../utils */ "./src/utils.ts");
+// Component `Hello` uses props and state interfaces
+var Hello = /** @class */ (function (_super) {
+    __extends(Hello, _super);
+    function Hello(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            messageText: "Press button to generate text"
+        };
+        return _this;
+    }
+    Hello.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", null,
+            React.createElement("h1", null,
+                "Hello from ",
+                this.props.compiler,
+                " and ",
+                this.props.framework,
+                "!"),
+            React.createElement("button", { onClick: function () { return _this.fetchMessage(); } }, "Load important content"),
+            React.createElement(Message, { text: this.state.messageText }));
+    };
+    Hello.prototype.fetchMessage = function () {
+        var _this = this;
+        utils_1.postData("getMessage", {
+            nothing: "This is an empty request!"
+        })
+            .then(function (message) {
+            _this.setState({
+                messageText: message
+            });
+        });
+    };
+    return Hello;
+}(React.Component));
+exports.Hello = Hello;
+// Element as anonymous function
+var Message = function (props) { return React.createElement("div", null, props.text); };
 
 
 /***/ }),
@@ -120,7 +166,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 var Hello_1 = __webpack_require__(/*! ./components/Hello */ "./src/components/Hello.tsx");
-ReactDOM.render(React.createElement(Hello_1.Hello, { compiler: "TypeScript", framework: "React" }), document.getElementById("example"));
+ReactDOM.render(React.createElement(Hello_1.Hello, { compiler: "TypeScript", framework: "React" }), document.getElementById("root"));
+
+
+/***/ }),
+
+/***/ "./src/utils.ts":
+/*!**********************!*\
+  !*** ./src/utils.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function postData(url, data) {
+    if (data === void 0) { data = {}; }
+    return fetch(url, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        redirect: "follow",
+        referrer: "no-referrer",
+        body: JSON.stringify(data),
+    })
+        .then(function (response) { return response.json(); }); // parses response to JSON
+}
+exports.postData = postData;
 
 
 /***/ }),
